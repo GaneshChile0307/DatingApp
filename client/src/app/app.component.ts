@@ -19,12 +19,10 @@ export class AppComponent implements OnInit{
   }
 
   setCurrentUser(){
-    const user =() => {
-      try{
-        return JSON.parse(localStorage.getItem('user') || "");
-      } catch(error){
-        return null;
-      }
+    const user: User = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      this.accountService.setCurrentUser(user);
+      // this.presence.createHubConnection(user);
     }
 
   }
