@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Data;
 using API.DTOs;
@@ -26,14 +27,14 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        // [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
         {
             var users = await _userRepository.GetMembersAsync();
             return Ok(users);
             
         }
-        [Authorize]
+        // [Authorize]
         [HttpGet("{username}")]
         
         public async Task<ActionResult<MemberDto>> GetUser(string username)
@@ -41,5 +42,33 @@ namespace API.Controllers
            return await _userRepository.GetMemberAsync(username);
             
         }
+
+        
+        [HttpPut]
+        public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
+        {
+
+            // var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
+
+            // _mapper.Map(memberUpdateDto, user);
+
+            // _unitOfWork.UserRepository.Update(user);
+
+            // if (await _unitOfWork.Complete()) return NoContent();
+
+            // return BadRequest("Failed to update user");
+
+            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userRepository.GetUserByUsernameAsync(username);
+
+            _mapper.Map(memberUpdateDto ,user);
+
+            _userRepository.Update(user);
+
+            if(await _userRepository.SaveAllAsync()) return NoContent();
+            
+            return BadRequest("Failed to update user");
+        }
+
     }
 }
