@@ -12,7 +12,7 @@ namespace API.Entities
 
         public Boolean IsMain { get; set; }
 
-        public int PublicId { get; set; }
+        public string PublicId { get; set; }
 
         public AppUser AppUser { get; set; }
 
