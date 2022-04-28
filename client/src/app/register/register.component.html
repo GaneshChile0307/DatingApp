@@ -1,33 +1,56 @@
-<form #registerForm="ngForm" (ngSubmit)="register()" autocomplete="off">
+    <form [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off">
     <h2 class="text-centre text-primary">Sign Up ..</h2>
     <hr>
-    <div class="form-group" style='text-align: center'>
-        <input class="form-control" 
-        type="text" 
-        name="username" 
-        [(ngModel)]="model.username" 
-        placeholder="Username">
+    <div class="mb-3">
+        <label style="margin-right: 10px;">I am a: </label>
+        <label class="form-check-label">
+            <input class="form-check-input" type="radio" value='male' formControlName='gender'> Male
+        </label>
+        <label class="form-check-label">
+            <input type="radio" value='female' formControlName='gender' class="form-check-input ms-3"> Female
+        </label>
     </div>
-    <!-- <hr>
-    <div class="form-group">
-        <label>Hello</label>
-        <select class="form-control">
-            <option *ngFor="let user of userFromHomeComponent" [value]="user.userName">
-            {{user.userName}}
-            </option>
-        </select>
-    </div> -->
+        
+        <app-text-inputs [formControl]='registerForm.controls["username"]' 
+        [label]='"Username"'></app-text-inputs>
+
+        <app-text-inputs [formControl]='registerForm.controls["knownAs"]' 
+            [label]='"Known As"'></app-text-inputs>
+
+        <app-date-input [formControl]='registerForm.controls["dateOfBirth"]' 
+            [label]='"Date Of Birth"'></app-date-input>
+
+        <app-text-inputs [formControl]='registerForm.controls["city"]' 
+            [label]='"City"'></app-text-inputs>
+
+        <app-text-inputs [formControl]='registerForm.controls["country"]' 
+            [label]='"Country"'></app-text-inputs>
+
+        <app-text-inputs [formControl]='registerForm.controls["password"]' 
+            [label]='"Password"' [type]='"password"'></app-text-inputs>
+
+        <app-text-inputs [formControl]='registerForm.controls["confirmPassword"]' 
+            [label]='"Confirm Password"' [type]='"password"'></app-text-inputs>
     <hr>
-    <div class="form-group" style='text-align: center'>
-        <input class="form-control" 
-        type="password" 
-        name="password" 
-        [(ngModel)]="model.password" 
-        placeholder="Password">
+
+    <div class="row" *ngIf="validationErrors.length > 0">
+        <ul class="text-danger">
+            <li *ngFor="let error of validationErrors">
+                {{error}}
+            </li>
+        </ul>
     </div>
-    <hr>
+    
     <div class="form-group text-centre" style='text-align: center'>
-        <button class="btn btn-success mr-2" type="submit">Register</button>
+        <button [disabled]="!registerForm.valid" class="btn btn-success mr-2" type="submit">Register</button>
         <button class="btn btn-default mr-2" type="button" (click)="cancel()">cancel</button>
     </div>
-</form>
+    </form>
+
+    <p>
+    form value : {{registerForm.value| json}}
+    </p>
+
+    <p>
+    form status : {{registerForm.status | json}}
+    </p>
